@@ -38,8 +38,10 @@ This ensures compatibility with ParaView, VTK, and other software like Petsc's D
   book](https://book.vtk.org/en/latest/VTKBook/05Chapter5.html#nonlinear-types)
 - Seemingly outdated node numbering was used in this [CoreForm blog
   post](https://www.kitware.com/implementation-of-rational-bezier-cells-into-vtk/),
-  which mentioned that the VTK implementation may not fully align with the latest
-  developments in finite element modeling.
+  which mentioned that the VTK implementation may not fully align with the
+  latest developments in finite element modeling. [This is the
+  MR](https://gitlab.kitware.com/vtk/vtk/-/merge_requests/6678) that changed
+  this behaviour in VTK.
 
 # Changelog
 

@@ -28,7 +28,7 @@ VTK_CELLTYPES = {
 # %%
 # Change to desired element here
 element_type = "hexahedron"
-element_order = 3
+element_order = 2
 
 assert (element_type) in VTK_CELLTYPES.keys()
 assert element_order in range(1, 11), "Element order must be between 1 and 10"
@@ -115,7 +115,7 @@ tensorized_pointdata = np.arange(len(tensorized_points_3d), dtype=np.float64)
 
 # Add node numbers as text labels for Lagrange points
 for i, (x, y, z) in enumerate(points):
-    ax.text(x, y, z - 0.05, f"  {i}", fontsize=8, color="blue")
+    ax.text(x, y, z - 0.05, f"  VTK{i}", fontsize=8, color="blue")
 
 # Add node numbers as text labels for tensorized points
 for i, (x, y, z) in enumerate(tensorized_points_3d):
@@ -131,13 +131,13 @@ ax.set_title(
 )
 
 # Add colorbar for Lagrange points
-plt.colorbar(scatter_lagrange, ax=ax, shrink=0.5, aspect=5, label="Node Index")
+plt.colorbar(
+    scatter_lagrange, ax=ax, shrink=0.5, aspect=5, label="Node index in VTK"
+)
 
-# Add legend
-ax.legend()
 
 # Look down in positive direction for x/y.
-ax.view_init(elev=45, azim=-105)
+ax.view_init(elev=40, azim=-115)
 
 # Show the plot
 plt.tight_layout()
