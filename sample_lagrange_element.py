@@ -68,14 +68,27 @@ writer.SetDataModeToAscii()
 writer.SetCompressorTypeToNone()
 writer.SetFileName("lagrange_sample.vtu")
 writer.Write()
+# Now let's create the tensorized points, first 1d
+tensorized_points = np.linspace(0, 1, element_order + 1)
+
+
+tensorized_points_3d = np.array(
+    np.meshgrid(
+        tensorized_points,
+        tensorized_points,
+        tensorized_points,
+        indexing="ij",
+    )
+).T.reshape(-1, 3)
+
 
 # %%
 # Create 3D scatter plot of node ordering
 fig = plt.figure(figsize=(10, 8))
 ax = fig.add_subplot(111, projection="3d")
 
-# Create scatter plot
-scatter = ax.scatter(
+# Create scatter plot for Lagrange points
+scatter_lagrange = ax.scatter(
     points[:, 0],
     points[:, 1],
     points[:, 2],
@@ -83,11 +96,30 @@ scatter = ax.scatter(
     cmap="rainbow",
     s=100,
     alpha=1.0,
+    label="Lagrange Points",
 )
 
-# Add node numbers as text labels
+# Create scatter plot for tensorized points
+tensorized_pointdata = np.arange(len(tensorized_points_3d), dtype=np.float64)
+# scatter_tensor = ax.scatter(
+#     tensorized_points_3d[:, 0],
+#     tensorized_points_3d[:, 1],
+#     tensorized_points_3d[:, 2],
+#     c=tensorized_pointdata,
+#     cmap="viridis",
+#     s=50,
+#     alpha=0.6,
+#     marker="^",
+#     label="Tensorized Points",
+# )
+
+# Add node numbers as text labels for Lagrange points
 for i, (x, y, z) in enumerate(points):
-    ax.text(x, y, z, f"  {i}", fontsize=8)
+    ax.text(x, y, z - 0.05, f"  {i}", fontsize=8, color="blue")
+
+# Add node numbers as text labels for tensorized points
+for i, (x, y, z) in enumerate(tensorized_points_3d):
+    ax.text(x, y, z + 0.05, f"  T{i}", fontsize=7, color="green")
 
 # Set labels and title
 ax.set_xlabel("X")
@@ -95,11 +127,14 @@ ax.set_ylabel("Y")
 ax.set_zlabel("Z")
 ax.set_title(
     f"{element_type.capitalize()} Element (Order "
-    f"{element_order}) - Node Ordering"
+    f"{element_order}) - Node Ordering Comparison"
 )
 
-# Add colorbar
-plt.colorbar(scatter, ax=ax, shrink=0.5, aspect=5, label="Node Index")
+# Add colorbar for Lagrange points
+plt.colorbar(scatter_lagrange, ax=ax, shrink=0.5, aspect=5, label="Node Index")
+
+# Add legend
+ax.legend()
 
 # Look down in positive direction for x/y.
 ax.view_init(elev=45, azim=-105)
@@ -107,3 +142,5 @@ ax.view_init(elev=45, azim=-105)
 # Show the plot
 plt.tight_layout()
 plt.show()
+
+# %%
